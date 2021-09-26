@@ -1,21 +1,27 @@
+BEG = -1
+END = 1
+
 n = int(input())
-leftright = []
+events = []
 for i in range(n):
     l, r = map(int, input().split())
-    leftright.append((min(l,r), max(l,r)))
+    events.append((min(l,r), BEG))
+    events.append((max(l,r), END))
 
-leftright.sort()
+events.sort()
 answer = 0
-left, right  = leftright[0]
-for i in range(n):
-    nextleft, nextright = leftright[i]
-    if nextleft  <= right:
-        right = nextright
-        if i == n-1:
-            answer += right - left
-    else:
-        answer += right - left
-        left = nextleft
-        right = nextright
+brushes = 0
+left = None
+for event in events:
+    point, etype = event
+    if etype == END:
+        brushes -= 1
+        if brushes == 0:
+            answer += point - left
+    elif etype == BEG:
+        if brushes == 0:
+            left = point
+        brushes += 1
 
-print(answer)
+
+print(answer) 
