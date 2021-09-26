@@ -1,21 +1,23 @@
+COM = 1
+LEV = -1
+
 n = int(input())
-leftright = []
+events = []
 for i in range(n):
-    l, r = map(int, input().split())
-    leftright.append((l, l+r))
+    start, dur = map(int, input().split())
+    events.append((start, COM))
+    events.append((start+dur, LEV))
 
-leftright.sort()
-machineCount = 1
-nextCount = 1
-left, right  = leftright[0]
-for i in range(n):
-    nextleft, nextright = leftright[i]
-    if nextleft  < right:
-        nextCount += 1
-        right = nextright
-    else:
-        max(machineCount, nextCount)
-        left = nextleft
-        right = nextright
+events.sort()
+machinesCount = 0
+maxMachines = 0
+left = None
+for event in events:
+    time, etype = event
+    if etype == COM:
+        machinesCount += 1
+        maxMachines = max(maxMachines, machinesCount)
+    if etype == LEV:
+        machinesCount -= 1
 
-print(max(machineCount, nextCount))
+print(maxMachines)
